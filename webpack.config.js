@@ -1,6 +1,7 @@
 const resolve = require('path').resolve
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const url = require('url')
 const publicPath = ''
 
@@ -28,7 +29,7 @@ module.exports = (options = {}) => ({
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'sass-loader', 'postcss-loader']
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'resolve-url-loader', 'sass-loader']
       },
       {
         test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
@@ -45,13 +46,18 @@ module.exports = (options = {}) => ({
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest']
     }),
+    new ExtractTextPlugin("[name].css", {
+      allChunks: true,
+      disable: false
+    }),
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      filename: 'app.html',
+      template: 'html/index.html',
       chunks: ['manifest', 'vendor', 'index']
     }),
     new HtmlWebpackPlugin({
-      filename: 'login.html',
-      template: 'src/login.html',
+      filename: 'index.html',
+      template: 'html/index.html',
       chunks: ['manifest', 'vendor', 'login']
     })
   ],

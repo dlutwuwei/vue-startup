@@ -63,5 +63,5 @@
     }
 </script>
 <style lang="scss">
-    @import '../scss/login.scss';
+    @import '../../scss/login.scss';
 </style>
