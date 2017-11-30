@@ -20,7 +20,10 @@ module.exports = (options = {}) => ({
   module: {
     rules: [{
         test: /\.vue$/,
-        use: ['vue-loader']
+        loader: 'vue-loader',
+        options: {
+          extractCSS: true
+        }
       },
       {
         test: /\.js$/,
@@ -29,7 +32,10 @@ module.exports = (options = {}) => ({
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'resolve-url-loader', 'sass-loader']
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'postcss-loader', 'resolve-url-loader', 'sass-loader']
+        })
       },
       {
         test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
@@ -51,19 +57,22 @@ module.exports = (options = {}) => ({
       disable: false
     }),
     new HtmlWebpackPlugin({
-      filename: 'app.html',
-      template: 'html/index.html',
-      chunks: ['manifest', 'vendor', 'index']
-    }),
-    new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'html/index.html',
-      chunks: ['manifest', 'vendor', 'login']
+      chunks: ['manifest', 'vendor', 'index'],
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'login.html',
+      template: 'html/index.html',
+      chunks: ['manifest', 'vendor', 'login'],
+      inject: true
     })
   ],
   resolve: {
     alias: {
-      '~': resolve(__dirname, 'src')
+      '~': resolve(__dirname, 'src'),
+      'vue': 'vue/dist/vue.js'
     }
   },
   devServer: {
